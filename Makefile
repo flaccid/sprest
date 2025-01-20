@@ -44,6 +44,9 @@ docker-run:: ## runs the docker image locally
 			--rm \
 			$(DOCKER_REGISTRY)/$(IMAGE_ORG)/$(IMAGE_NAME):$(IMAGE_VERSION)
 
+docker-pull:: ## pulls the docker image from the registry
+		@docker pull $(IMAGE_TAG)
+
 docker-push:: ## pushes the docker image to the registry
 		@docker push $(IMAGE_TAG)
 
