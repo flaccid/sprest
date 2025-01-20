@@ -6,7 +6,7 @@ IMAGE_TAG = $(DOCKER_REGISTRY)/$(IMAGE_ORG)/$(IMAGE_NAME):$(IMAGE_VERSION)
 
 WORKING_DIR := $(shell pwd)
 
-.DEFAULT_GOAL := docker-build
+.DEFAULT_GOAL := help
 
 .PHONY: docker-release
 
@@ -19,18 +19,29 @@ update-modules:: ## updates the go modules
 run:: ## runs the main program with go
 		@go run cmd/sprest/sprest.go $(ARGS)
 
+run-bin:: ## runs the built executable
+		bin/sprest $(ARGS)
+
 build:: ## builds the main program with go
 		@go build -o bin/sprest cmd/sprest/sprest.go
 
 docker-build:: ## builds the docker image locally
 		@docker build \
 			--pull \
+			-t $(IMAGE_TAG) $(WORKING_DIR)
+
+docker-build-no-cache:: ## builds the docker image locally (no cache)
+		@docker build \
+			--pull \
 			--no-cache \
 			-t $(IMAGE_TAG) $(WORKING_DIR)
 
 docker-run:: ## runs the docker image locally
-		@docker run \
+		docker run \
 			-it \
+			-v ~/.aws:/home/steampipe/.aws \
+			-p 8080:8080 \
+			--rm \
 			$(DOCKER_REGISTRY)/$(IMAGE_ORG)/$(IMAGE_NAME):$(IMAGE_VERSION)
 
 docker-push:: ## pushes the docker image to the registry
