@@ -16,3 +16,15 @@ docker run \
         flaccid/sprest \
             /sprest -l debug
 ```
+
+With bind mount volume to host's aws config:
+
+```
+docker run \
+    -it \
+    --rm \
+    -v "$HOME/.aws:/home/steampipe/.aws" \
+    -p 8080:8080 \
+        flaccid/sprest \
+            /sprest -l debug
+```
