@@ -6,6 +6,8 @@ IMAGE_TAG = $(DOCKER_REGISTRY)/$(IMAGE_ORG)/$(IMAGE_NAME):$(IMAGE_VERSION)
 
 WORKING_DIR := $(shell pwd)
 
+COMMIT := $(shell git rev-parse HEAD)
+
 .DEFAULT_GOAL := help
 
 .PHONY: docker-release
@@ -14,7 +16,7 @@ deps:: ## installs go deps recursively
 		@cd cmd/sprest && go get ./...
 
 update-modules:: ## updates the go modules
-		@go mod tidy
+		@cd cmd/sprest && go get -u ./... && go mod tidy
 
 run:: ## runs the main program with go
 		@go run cmd/sprest/sprest.go $(ARGS)
@@ -23,7 +25,10 @@ run-bin:: ## runs the built executable
 		bin/sprest $(ARGS)
 
 build:: ## builds the main program with go
-		@go build -o bin/sprest cmd/sprest/sprest.go
+		CGO_ENABLED=0 GOOS=linux go build \
+			-ldflags="-X main.Commit=$(COMMIT)" \
+			-o bin/sprest \
+				cmd/sprest/sprest.go
 
 docker-build:: ## builds the docker image locally
 		@docker build \
@@ -60,6 +65,9 @@ docker-push:: ## pushes the docker image to the registry
 		@docker push $(IMAGE_TAG)
 
 docker-release:: docker-build docker-push ## builds and pushes the docker image to the registry
+
+print-commit:: ## prints the git commit
+		@echo $(COMMIT)
 
 # A help target including self-documenting targets (see the awk statement)
 define HELP_TEXT

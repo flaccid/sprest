@@ -10,6 +10,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+var Commit string
+
 func beforeApp(c *cli.Context) error {
 	fmt.Printf("sprest %s\n", "v0.0.1")
 
@@ -36,7 +38,7 @@ func beforeApp(c *cli.Context) error {
 func main() {
 	app := cli.NewApp()
 	app.Name = "sprest"
-	app.Version = "v0.0.1"
+	app.Version = fmt.Sprintf("v0.0.1 (%s)", Commit)
 	app.Usage = "rest interface for steampipe"
 	app.Action = start
 	app.Before = beforeApp
