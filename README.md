@@ -12,6 +12,7 @@ docker run \
     -e AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" \
     -e AWS_REGION="$AWS_REGION" \
     -e AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" \
+    -p 8080:8080 \
         flaccid/sprest \
             /sprest -l debug
 ```
