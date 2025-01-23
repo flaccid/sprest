@@ -33,6 +33,7 @@ build:: ## builds the main program with go
 docker-build:: ## builds the docker image locally
 		@docker build \
 			--pull \
+			--progress=plain \
 			-t $(IMAGE_TAG) $(WORKING_DIR)
 
 docker-build-no-cache:: ## builds the docker image locally (no cache)
@@ -41,8 +42,14 @@ docker-build-no-cache:: ## builds the docker image locally (no cache)
 			--no-cache \
 			-t $(IMAGE_TAG) $(WORKING_DIR)
 
+docker-exec-shell:: ## executes a shell on the sprest container
+		docker exec \
+			-it \
+				sprest /bin/bash
+
 docker-run:: ## runs the docker image locally
 		docker run \
+			--name sprest \
 			-it \
 			-v ~/.aws:/home/steampipe/.aws \
 			-p 8080:8080 \
@@ -51,12 +58,16 @@ docker-run:: ## runs the docker image locally
 
 docker-run-debug:: ## runs the docker image locally (debug)
 		docker run \
+			--name sprest \
 			-it \
 			-v ~/.aws:/home/steampipe/.aws \
 			-p 8080:8080 \
 			--rm \
 			$(DOCKER_REGISTRY)/$(IMAGE_ORG)/$(IMAGE_NAME):$(IMAGE_VERSION) \
 				/sprest -l debug
+
+docker-rm:: ## removes the sprest container
+		docker rm -f sprest
 
 docker-pull:: ## pulls the docker image from the registry
 		@docker pull $(IMAGE_TAG)
