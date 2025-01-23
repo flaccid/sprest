@@ -44,6 +44,15 @@ docker-run:: ## runs the docker image locally
 			--rm \
 			$(DOCKER_REGISTRY)/$(IMAGE_ORG)/$(IMAGE_NAME):$(IMAGE_VERSION)
 
+docker-run-debug:: ## runs the docker image locally (debug)
+		docker run \
+			-it \
+			-v ~/.aws:/home/steampipe/.aws \
+			-p 8080:8080 \
+			--rm \
+			$(DOCKER_REGISTRY)/$(IMAGE_ORG)/$(IMAGE_NAME):$(IMAGE_VERSION) \
+				/sprest -l debug
+
 docker-pull:: ## pulls the docker image from the registry
 		@docker pull $(IMAGE_TAG)
 
