@@ -18,6 +18,7 @@ func queryHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "%s", "{\"error\": \"missing query string parameter\"}")
 		return
 	}
+	log.Debugf("query (GET ?q=)=%s", q)
 
 	log.Debug("checking if steampipe executable is in path")
 	steampipePath, err := exec.LookPath("steampipe")
