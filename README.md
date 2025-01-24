@@ -2,6 +2,12 @@
 
 Steampipe REST interface.
 
+## Container Image
+
+The `Dockerfile` (published on docker hub to `flaccid/sprest`) includes steampipe and sprest.
+
+Note: no upstream image is published for steampipe (https://steampipe.io/docs/faq/overview#where-is-the-dockerfile-or-container-example).
+
 ## Usage
 
 With host shell's aws variables and debug logging:

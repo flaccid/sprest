@@ -14,6 +14,7 @@ RUN apt-get update && \
     bash \
     curl \
     iproute2 \
+    jq \
     less \
     procps \
     sudo && \
